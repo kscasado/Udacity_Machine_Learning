@@ -10,10 +10,9 @@ class LearningAgent(Agent):
 
     def __init__(self, env, learning=False, epsilon=1.0, alpha=0.5):
         super(LearningAgent, self).__init__(env)     # Set the agent in the evironment
-        self.color = 'red'
+        #self.color = 'red'
         self.planner = RoutePlanner(self.env, self)  # Create a route planner
         self.valid_actions = self.env.valid_actions  # The set of valid actions
-
         # Set parameters of the learning agent
         self.learning = learning # Whether the agent is expected to learn
         self.Q = dict()          # Create a Q-table which will be a dictionary of tuples
@@ -62,7 +61,7 @@ class LearningAgent(Agent):
         #   If it is not, create a dictionary in the Q-table for the current 'state'
         #   For each action, set the Q-value for the state-action pair to 0
 
-        state = None
+        state = waypoint,inputs,deadline
 
         return state
 
@@ -101,7 +100,7 @@ class LearningAgent(Agent):
         # Set the agent state and default action
         self.state = state
         self.next_waypoint = self.planner.next_waypoint()
-        action = None
+        action = random.randint(1,5)
 
         ###########
         ## TO DO ##
@@ -109,6 +108,10 @@ class LearningAgent(Agent):
         # When not learning, choose a random action
         # When learning, choose a random action with 'epsilon' probability
         #   Otherwise, choose an action with the highest Q-value for the current state
+        action_dict = dict(zip([1,2,3,4],[None,'left','right','forward']))
+        random_action = random.randint(1,4)
+        action=action_dict[random_action]
+        print(action)
 
         return action
 
@@ -166,7 +169,7 @@ def run():
     # Flags:
     #   enforce_deadline - set to True to enforce a deadline metric
 
-    env.set_primary_agent(agent, enforce_deadline=True)
+    env.set_primary_agent(agent)
 
     ##############
     # Create the simulation
@@ -176,15 +179,15 @@ def run():
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
 
-    sim = Simulator(env, update_delay=.01, log_metrics=True)
+    sim = Simulator(env)
 
     ##############
     # Run the simulator
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05
     #   n_test     - discrete number of testing trials to perform, default is 0
-    
-    sim.run(n_test=10)
+
+    sim.run()
 
 
 if __name__ == '__main__':
