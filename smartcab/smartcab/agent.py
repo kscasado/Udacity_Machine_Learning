@@ -39,7 +39,7 @@ class LearningAgent(Agent):
         # Update epsilon using a decay function of your choice
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
-        self.epsilon = self.epsilon - .005
+        self.epsilon = self.epsilon - .05
         if testing:
             self.epsilon = 0
             self.alpha = 0
@@ -130,9 +130,9 @@ class LearningAgent(Agent):
         action_dict = dict(zip([1,2,3,4],[None,'left','right','forward']))
         random_action = random.randint(1,4)
         if self.learning:
-            if epsilon > self.epsilon:
-                return get_maxQ(state)
-            else
+            if epsilon < self.epsilon:
+                return self.get_maxQ(state)
+            else:
                 return action_dict[random_action]
 
 
@@ -184,14 +184,14 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent)
+    agent = env.create_agent(LearningAgent, learning=True)
 
     ##############
     # Follow the driving agent
     # Flags:
     #   enforce_deadline - set to True to enforce a deadline metric
 
-    env.set_primary_agent(agent)
+    env.set_primary_agent(agent, enforce_deadline=True)
 
     ##############
     # Create the simulation
@@ -201,7 +201,7 @@ def run():
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
 
-    sim = Simulator(env)
+    sim = Simulator(env, update_delay=.01, log_metrics=True)
 
     ##############
     # Run the simulator
@@ -209,7 +209,7 @@ def run():
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05
     #   n_test     - discrete number of testing trials to perform, default is 0
 
-    sim.run()
+    sim.run(n_test=10)
 
 
 if __name__ == '__main__':
