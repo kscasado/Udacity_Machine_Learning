@@ -15,7 +15,7 @@ class LearningAgent(Agent):
         self.valid_actions = self.env.valid_actions  # The set of valid actions
         # Set parameters of the learning agent
         self.learning = learning # Whether the agent is expected to learn
-        self.Q = dict()          # Create a Q-table which will be a dictionary of tuples
+        self.Q = {}          # Create a Q-table which will be a dictionary of tuples
         self.epsilon = epsilon   # Random exploration factor
         self.alpha = alpha       # Learning factor
 
@@ -39,7 +39,11 @@ class LearningAgent(Agent):
         # Update epsilon using a decay function of your choice
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
-        self.epsilon = self.epsilon
+        self.epsilon = self.epsilon - .005
+        if testing:
+            self.epsilon = 0
+            self.alpha = 0
+
 
         return None
 
@@ -61,7 +65,9 @@ class LearningAgent(Agent):
         #   If it is not, create a dictionary in the Q-table for the current 'state'
         #   For each action, set the Q-value for the state-action pair to 0
 
-        state = waypoint,inputs,deadline
+        #dictionary cannot have key items it has to have tuple items
+        state_inputs = tuple([(input, inputs[input]) for input in inputs])
+        state = (waypoint,state_inputs,deadline)
 
         return state
 
@@ -74,8 +80,14 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Calculate the maximum Q-value of all actions for a given state
-
+        #USE NONE as the test value
         maxQ = None
+        test_value = self.Q[state][None]
+        for action in self.Q[state]:
+            if self.Q[state][action]>= test_value:
+                test_value = self.Q[state][action]
+                maxQ = action
+
 
         return maxQ
 
@@ -89,9 +101,12 @@ class LearningAgent(Agent):
         # When learning, check if the 'state' is not in the Q-table
         # If it is not, create a new dictionary for that state
         #   Then, for each action available, set the initial Q-value to 0.0
-        if not state in self.Q
+
+        #state = frozenset(state.items())
+        if not self.Q.has_key(state):
             #create new dictionary
-            self.Q[state]=dict(zip(self.valie_actions,[0.0 for i in range(4)]))
+            self.Q[state]=dict(zip(self.valid_actions,[0.0 for i in range(4)]))
+
 
 
         return
@@ -105,7 +120,7 @@ class LearningAgent(Agent):
         self.state = state
         self.next_waypoint = self.planner.next_waypoint()
         action = random.randint(1,5)
-
+        epsilon = random.random()
         ###########
         ## TO DO ##
         ###########
@@ -114,10 +129,11 @@ class LearningAgent(Agent):
         #   Otherwise, choose an action with the highest Q-value for the current state
         action_dict = dict(zip([1,2,3,4],[None,'left','right','forward']))
         random_action = random.randint(1,4)
-        action=action_dict[random_action]
-        print(action)
-
-        return action
+        if self.learning:
+            if epsilon > self.epsilon:
+                return get_maxQ(state)
+            else
+                return action_dict[random_action]
 
 
     def learn(self, state, action, reward):
@@ -131,7 +147,9 @@ class LearningAgent(Agent):
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
 
-        return
+        self.Q[state][action] = reward
+
+        return None
 
 
     def update(self):
