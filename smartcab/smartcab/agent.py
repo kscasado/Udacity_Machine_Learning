@@ -8,7 +8,8 @@ class LearningAgent(Agent):
     """ An agent that learns to drive in the Smartcab world.
         This is the object you will be modifying. """
 
-    def __init__(self, env, learning=False, epsilon=1.0, alpha=0.5):
+    def __init__(self, env, learning=False, epsilon=0.8, alpha=0.5):
+        print('epsilon from init', epsilon)
         super(LearningAgent, self).__init__(env)     # Set the agent in the evironment
         #self.color = 'red'
         self.planner = RoutePlanner(self.env, self)  # Create a route planner
@@ -17,8 +18,9 @@ class LearningAgent(Agent):
         self.learning = learning # Whether the agent is expected to learn
         self.Q = {}          # Create a Q-table which will be a dictionary of tuples
         self.epsilon = epsilon   # Random exploration factor
+        print('self.epsilon from init', self.epsilon)
         self.alpha = alpha       # Learning factor
-
+        self.trial_number = 1
         ###########
         ## TO DO ##
         ###########
@@ -39,12 +41,13 @@ class LearningAgent(Agent):
         # Update epsilon using a decay function of your choice
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
-        self.epsilon = self.epsilon - .05
+        #self.epsilon = self.epsilon - .05
+        self.epsilon = 1/(self.trial_number**2)
         if testing:
-            self.epsilon = 0
+            self.epsilon = 0.0
             self.alpha = 0
 
-
+        self.trial_number+=1
         return None
 
     def build_state(self):
@@ -84,9 +87,15 @@ class LearningAgent(Agent):
         maxQ = None
         test_value = self.Q[state][None]
         for action in self.Q[state]:
+            print('outside of loop')
+            print(self.Q[state][action])
             if self.Q[state][action]>= test_value:
+                print('inside of loop')
+                print(self.Q[state][action])
+                print(test_value)
                 test_value = self.Q[state][action]
                 maxQ = action
+
 
 
         return maxQ
@@ -121,6 +130,8 @@ class LearningAgent(Agent):
         self.next_waypoint = self.planner.next_waypoint()
         action = random.randint(1,5)
         epsilon = random.random()
+        print('epsilon'+ str(epsilon))
+        print(self.epsilon)
         ###########
         ## TO DO ##
         ###########
@@ -130,7 +141,9 @@ class LearningAgent(Agent):
         action_dict = dict(zip([1,2,3,4],[None,'left','right','forward']))
         random_action = random.randint(1,4)
         if self.learning:
-            if epsilon < self.epsilon:
+
+            print('self.epsilon',self.epsilon)
+            if epsilon > self.epsilon:
                 return self.get_maxQ(state)
             else:
                 return action_dict[random_action]
@@ -184,7 +197,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, learning=True)
+    agent = env.create_agent(LearningAgent, epsilon = 0.80,alpha=0.75,learning=True)
 
     ##############
     # Follow the driving agent
@@ -201,7 +214,7 @@ def run():
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
 
-    sim = Simulator(env, update_delay=.01, log_metrics=True)
+    sim = Simulator(env, update_delay=.01, log_metrics=True, optimized=True)
 
     ##############
     # Run the simulator
@@ -209,7 +222,7 @@ def run():
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05
     #   n_test     - discrete number of testing trials to perform, default is 0
 
-    sim.run(n_test=10)
+    sim.run(n_test=15, tolerance=.01)
 
 
 if __name__ == '__main__':
