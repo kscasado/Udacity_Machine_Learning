@@ -8,8 +8,10 @@ class LearningAgent(Agent):
     """ An agent that learns to drive in the Smartcab world.
         This is the object you will be modifying. """
 
-    def __init__(self, env, learning=False, epsilon=0.8, alpha=0.5):
+    def __init__(self, env, learning=False, epsilon=1.0, alpha=0.5):
         print('epsilon from init', epsilon)
+
+        print('learning flag' , learning)
         super(LearningAgent, self).__init__(env)     # Set the agent in the evironment
         #self.color = 'red'
         self.planner = RoutePlanner(self.env, self)  # Create a route planner
@@ -33,6 +35,7 @@ class LearningAgent(Agent):
             once training trials have completed. """
 
         # Select the destination as the new location to route to
+
         self.planner.route_to(destination)
 
         ###########
@@ -42,7 +45,9 @@ class LearningAgent(Agent):
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
         #self.epsilon = self.epsilon - .05
-        self.epsilon = 1/(self.trial_number**2)
+        if self.trial_number !=1:
+            self.epsilon = self.epsilon-.05
+
         if testing:
             self.epsilon = 0.0
             self.alpha = 0
@@ -89,7 +94,8 @@ class LearningAgent(Agent):
         for action in self.Q[state]:
             print('outside of loop')
             print(self.Q[state][action])
-            if self.Q[state][action]>= test_value:
+            print('test_value',test_value)
+            if self.Q[state][action] > test_value:
                 print('inside of loop')
                 print(self.Q[state][action])
                 print(test_value)
@@ -97,7 +103,7 @@ class LearningAgent(Agent):
                 maxQ = action
 
 
-
+        print('maxQ returned',maxQ)
         return maxQ
 
 
@@ -130,22 +136,20 @@ class LearningAgent(Agent):
         self.next_waypoint = self.planner.next_waypoint()
         action = random.randint(1,5)
         epsilon = random.random()
-        print('epsilon'+ str(epsilon))
-        print(self.epsilon)
         ###########
         ## TO DO ##
         ###########
         # When not learning, choose a random action
         # When learning, choose a random action with 'epsilon' probability
         #   Otherwise, choose an action with the highest Q-value for the current state
-        action_dict = dict(zip([1,2,3,4],[None,'left','right','forward']))
+        action_dict = dict(zip([1,2,3,4],self.env.valid_actions))
         random_action = random.randint(1,4)
         if self.learning:
 
-            print('self.epsilon',self.epsilon)
             if epsilon > self.epsilon:
                 return self.get_maxQ(state)
             else:
+                print('random_action',action_dict[random_action])
                 return action_dict[random_action]
 
 
@@ -161,6 +165,10 @@ class LearningAgent(Agent):
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
 
         self.Q[state][action] = reward
+        print('here')
+        print(self.Q[state][action])
+        print(self.Q[state])
+        print(action)
 
         return None
 
