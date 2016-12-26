@@ -46,7 +46,7 @@ class LearningAgent(Agent):
         # If 'testing' is True, set epsilon and alpha to 0
         #self.epsilon = self.epsilon - .05
         if self.trial_number !=1:
-            self.epsilon = self.epsilon-.05
+            self.epsilon = self.alpha**self.trial_number
 
         if testing:
             self.epsilon = 0.0
@@ -74,8 +74,9 @@ class LearningAgent(Agent):
         #   For each action, set the Q-value for the state-action pair to 0
 
         #dictionary cannot have key items it has to have tuple items
+        
         state_inputs = tuple([(input, inputs[input]) for input in inputs])
-        state = (waypoint,state_inputs,deadline)
+        state = (waypoint,state_inputs)
 
         return state
 
@@ -197,7 +198,7 @@ def run():
     #   verbose     - set to True to display additional output from the simulation
     #   num_dummies - discrete number of dummy agents in the environment, default is 100
     #   grid_size   - discrete number of intersections (columns, rows), default is (8, 6)
-    env = Environment()
+    env = Environment(verbose=True)
 
     ##############
     # Create the driving agent
