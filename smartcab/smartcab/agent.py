@@ -63,7 +63,7 @@ class LearningAgent(Agent):
         # Collect data about the environment
         waypoint = self.planner.next_waypoint() # The next waypoint
         inputs = self.env.sense(self)           # Visual input - intersection light and traffic
-        deadline = self.env.get_deadline(self)  # Remaining deadline
+        #deadline = self.env.get_deadline(self)  # Remaining deadline
 
         ###########
         ## TO DO ##
@@ -74,7 +74,7 @@ class LearningAgent(Agent):
         #   For each action, set the Q-value for the state-action pair to 0
 
         #dictionary cannot have key items it has to have tuple items
-        
+
         state_inputs = tuple([(input, inputs[input]) for input in inputs])
         state = (waypoint,state_inputs)
 
@@ -93,18 +93,18 @@ class LearningAgent(Agent):
         maxQ = None
         test_value = self.Q[state][None]
         for action in self.Q[state]:
-            print('outside of loop')
-            print(self.Q[state][action])
-            print('test_value',test_value)
+            # print('outside of loop')
+            # print(self.Q[state][action])
+            # print('test_value',test_value)
             if self.Q[state][action] > test_value:
-                print('inside of loop')
-                print(self.Q[state][action])
-                print(test_value)
+                # print('inside of loop')
+                # print(self.Q[state][action])
+                # print(test_value)
                 test_value = self.Q[state][action]
                 maxQ = action
 
 
-        print('maxQ returned',maxQ)
+        #print('maxQ returned',maxQ)
         return maxQ
 
 
@@ -152,7 +152,8 @@ class LearningAgent(Agent):
             else:
                 print('random_action',action_dict[random_action])
                 return action_dict[random_action]
-
+        else:
+            return action_dict[random_action]
 
     def learn(self, state, action, reward):
         """ The learn function is called after the agent completes an action and
@@ -166,10 +167,10 @@ class LearningAgent(Agent):
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
 
         self.Q[state][action] = reward
-        print('here')
-        print(self.Q[state][action])
-        print(self.Q[state])
-        print(action)
+
+        # print(self.Q[state][action])
+        # print(self.Q[state])
+        # print(action)
 
         return None
 
@@ -206,7 +207,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, epsilon = 0.80,alpha=0.75,learning=True)
+    agent = env.create_agent(LearningAgent,learning=True,epsilon=.90,alpha=.7)
 
     ##############
     # Follow the driving agent
@@ -223,7 +224,7 @@ def run():
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
 
-    sim = Simulator(env, update_delay=.01, log_metrics=True, optimized=True)
+    sim = Simulator(env, update_delay=.01, log_metrics=True,optimized=True)
 
     ##############
     # Run the simulator
@@ -231,7 +232,7 @@ def run():
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05
     #   n_test     - discrete number of testing trials to perform, default is 0
 
-    sim.run(n_test=15, tolerance=.01)
+    sim.run(n_test=15,tolerance=.01)
 
 
 if __name__ == '__main__':
