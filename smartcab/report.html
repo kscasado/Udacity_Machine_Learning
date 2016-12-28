@@ -8456,15 +8456,15 @@ label {
 }
 /* Flexible box model classes */
 /* Taken from Alex Russell http://infrequently.org/2009/08/css-3-progress/ */
-/* This file is a compatability layer.  It allows the usage of flexible box 
+/* This file is a compatability layer.  It allows the usage of flexible box
 model layouts accross multiple browsers, including older browsers.  The newest,
 universal implementation of the flexible box model is used when available (see
-`Modern browsers` comments below).  Browsers that are known to implement this 
+`Modern browsers` comments below).  Browsers that are known to implement this
 new spec completely include:
 
     Firefox 28.0+
     Chrome 29.0+
-    Internet Explorer 11+ 
+    Internet Explorer 11+
     Opera 17.0+
 
 Browsers not listed, including Safari, are supported via the styling under the
@@ -11214,7 +11214,7 @@ div#pager .ui-resizable-handle {
   background: #f7f7f7;
   border-top: 1px solid #cfcfcf;
   border-bottom: 1px solid #cfcfcf;
-  /* This injects handle bars (a short, wide = symbol) for 
+  /* This injects handle bars (a short, wide = symbol) for
         the resize handle. */
 }
 div#pager .ui-resizable-handle::after {
@@ -11649,7 +11649,7 @@ ul.typeahead-list > li > a {
 .highlight .il { color: #666666 } /* Literal.Number.Integer.Long */
     </style>
 <style type="text/css">
-    
+
 /* Temporary definitions which will become obsolete with Notebook release 5.0 */
 .ansi-black-fg { color: #3E424D; }
 .ansi-black-bg { background-color: #3E424D; }
@@ -11705,14 +11705,14 @@ div#notebook {
   div.cell {
     display: block;
     page-break-inside: avoid;
-  } 
-  div.output_wrapper { 
-    display: block;
-    page-break-inside: avoid; 
   }
-  div.output { 
+  div.output_wrapper {
     display: block;
-    page-break-inside: avoid; 
+    page-break-inside: avoid;
+  }
+  div.output {
+    display: block;
+    page-break-inside: avoid;
   }
 }
 </style>
@@ -11962,25 +11962,25 @@ div#notebook {
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>visuals.py:74: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with 
+<pre>visuals.py:74: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with
 	Series.rolling(window=10,center=False).mean()
   data[&#39;average_reward&#39;] = pd.rolling_mean(data[&#39;net_reward&#39;] / (data[&#39;initial_deadline&#39;] - data[&#39;final_deadline&#39;]), 10)
-visuals.py:75: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with 
+visuals.py:75: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with
 	Series.rolling(window=10,center=False).mean()
   data[&#39;reliability_rate&#39;] = pd.rolling_mean(data[&#39;success&#39;]*100, 10)  # compute avg. net reward with window=10
-visuals.py:78: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with 
+visuals.py:78: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with
 	Series.rolling(window=10,center=False).mean()
   (data[&#39;initial_deadline&#39;] - data[&#39;final_deadline&#39;]), 10)
-visuals.py:80: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with 
+visuals.py:80: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with
 	Series.rolling(window=10,center=False).mean()
   (data[&#39;initial_deadline&#39;] - data[&#39;final_deadline&#39;]), 10)
-visuals.py:82: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with 
+visuals.py:82: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with
 	Series.rolling(window=10,center=False).mean()
   (data[&#39;initial_deadline&#39;] - data[&#39;final_deadline&#39;]), 10)
-visuals.py:84: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with 
+visuals.py:84: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with
 	Series.rolling(window=10,center=False).mean()
   (data[&#39;initial_deadline&#39;] - data[&#39;final_deadline&#39;]), 10)
-visuals.py:86: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with 
+visuals.py:86: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with
 	Series.rolling(window=10,center=False).mean()
   (data[&#39;initial_deadline&#39;] - data[&#39;final_deadline&#39;]), 10)
 </pre>
@@ -13766,7 +13766,7 @@ When taking into account the number of states for each part of the state there a
 <h2 id="Implement-a-Q-Learning-Driving-Agent">Implement a Q-Learning Driving Agent<a class="anchor-link" href="#Implement-a-Q-Learning-Driving-Agent">&#182;</a></h2><p>The third step to creating an optimized Q-Learning agent is to begin implementing the functionality of Q-Learning itself. The concept of Q-Learning is fairly straightforward: For every state the agent visits, create an entry in the Q-table for all state-action pairs available. Then, when the agent encounters a state and performs an action, update the Q-value associated with that state-action pair based on the reward received and the interative update rule implemented. Of course, additional benefits come from Q-Learning, such that we can have the agent choose the <em>best</em> action for each state based on the Q-values of each state-action pair possible. For this project, you will be implementing a <em>decaying,</em> $\epsilon$<em>-greedy</em> Q-learning algorithm with <em>no</em> discount factor. Follow the implementation instructions under each <strong>TODO</strong> in the agent functions.</p>
 <p>Note that the agent attribute <code>self.Q</code> is a dictionary: This is how the Q-table will be formed. Each state will be a key of the <code>self.Q</code> dictionary, and each value will then be another dictionary that holds the <em>action</em> and <em>Q-value</em>. Here is an example:</p>
 
-<pre><code>{ 'state-1': { 
+<pre><code>{ 'state-1': {
     'action-1' : Qvalue-1,
     'action-2' : Qvalue-2,
      ...
@@ -15530,25 +15530,25 @@ $$ \epsilon = a^t, \textrm{for } 0 < a < 1 \hspace{50px}\epsilon = \frac{1}{t^2}
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>visuals.py:74: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with 
+<pre>visuals.py:74: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with
 	Series.rolling(window=10,center=False).mean()
   data[&#39;average_reward&#39;] = pd.rolling_mean(data[&#39;net_reward&#39;] / (data[&#39;initial_deadline&#39;] - data[&#39;final_deadline&#39;]), 10)
-visuals.py:75: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with 
+visuals.py:75: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with
 	Series.rolling(window=10,center=False).mean()
   data[&#39;reliability_rate&#39;] = pd.rolling_mean(data[&#39;success&#39;]*100, 10)  # compute avg. net reward with window=10
-visuals.py:78: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with 
+visuals.py:78: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with
 	Series.rolling(window=10,center=False).mean()
   (data[&#39;initial_deadline&#39;] - data[&#39;final_deadline&#39;]), 10)
-visuals.py:80: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with 
+visuals.py:80: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with
 	Series.rolling(window=10,center=False).mean()
   (data[&#39;initial_deadline&#39;] - data[&#39;final_deadline&#39;]), 10)
-visuals.py:82: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with 
+visuals.py:82: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with
 	Series.rolling(window=10,center=False).mean()
   (data[&#39;initial_deadline&#39;] - data[&#39;final_deadline&#39;]), 10)
-visuals.py:84: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with 
+visuals.py:84: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with
 	Series.rolling(window=10,center=False).mean()
   (data[&#39;initial_deadline&#39;] - data[&#39;final_deadline&#39;]), 10)
-visuals.py:86: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with 
+visuals.py:86: FutureWarning: pd.rolling_mean is deprecated for Series and will be removed in a future version, replace with
 	Series.rolling(window=10,center=False).mean()
   (data[&#39;initial_deadline&#39;] - data[&#39;final_deadline&#39;]), 10)
 </pre>
@@ -15565,11 +15565,11 @@ visuals.py:86: FutureWarning: pd.rolling_mean is deprecated for Series and will 
 <span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>vs<span class="ansi-blue-fg">.</span>plot_trials<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;sim_improved-learning.csv&#39;</span><span class="ansi-blue-fg">)</span>
 
 <span class="ansi-green-fg">/Users/KevinDesktop/Dropbox/MachineLearning/smartcab/visuals.py</span> in <span class="ansi-cyan-fg">plot_trials</span><span class="ansi-blue-fg">(csv)</span>
-<span class="ansi-green-intense-fg ansi-bold">    191</span> 
+<span class="ansi-green-intense-fg ansi-bold">    191</span>
 <span class="ansi-green-intense-fg ansi-bold">    192</span>         <span class="ansi-green-fg">if</span> len<span class="ansi-blue-fg">(</span>testing_data<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">&gt;</span> <span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">:</span>
 <span class="ansi-green-fg">--&gt; 193</span><span class="ansi-red-fg">                 </span>safety_rating<span class="ansi-blue-fg">,</span> safety_color <span class="ansi-blue-fg">=</span> calculate_safety<span class="ansi-blue-fg">(</span>testing_data<span class="ansi-blue-fg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">    194</span>                 reliability_rating<span class="ansi-blue-fg">,</span> reliability_color <span class="ansi-blue-fg">=</span> calculate_reliability<span class="ansi-blue-fg">(</span>testing_data<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    195</span> 
+<span class="ansi-green-intense-fg ansi-bold">    195</span>
 
 <span class="ansi-green-fg">/Users/KevinDesktop/Dropbox/MachineLearning/smartcab/visuals.py</span> in <span class="ansi-cyan-fg">calculate_safety</span><span class="ansi-blue-fg">(data)</span>
 <span class="ansi-green-intense-fg ansi-bold">     35</span>                 <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span> <span class="ansi-red-fg"># Minor violation</span>
@@ -17063,7 +17063,7 @@ The decaying function that I used for epsilon was 1/alpha^t where t is the trial
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer:</strong> 
+<p><strong>Answer:</strong>
 An optimal policy would look like a situation where The light is red and the correct action is to do nothing Unless it is going to make a right turn. Or if the light is green the correct action is to go forward, while doing nothing should be considered a highly negative option. Looking at the .txt file towards the beginning of the testing phase There are specific situations where the light is green and None is a high negative value where as when the light is red None is a high positive value.</p>
 
 </div>
