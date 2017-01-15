@@ -76,7 +76,8 @@ class LearningAgent(Agent):
 
         #dictionary cannot have key items it has to have tuple items
 
-        state_inputs = tuple([(input, inputs[input]) for input in inputs])
+        state_inputs = tuple([(input, inputs[input]) for input in inputs if input !='right'])
+
         state = (waypoint,state_inputs)
 
         return state
@@ -106,7 +107,7 @@ class LearningAgent(Agent):
 
 
         #print('maxQ returned',maxQ)
-        return maxQ
+        return test_value
 
 
     def createQ(self, state):
@@ -149,7 +150,12 @@ class LearningAgent(Agent):
         if self.learning:
 
             if epsilon > self.epsilon:
-                return self.get_maxQ(state)
+                maxQ = self.get_maxQ(state)
+                #Build list of actions with maxQ value
+                possible_actions = [action if self.Q[state][action] == maxQ for action in self.valid_actions]
+                # if list is only one item return the first else return a random index of the list
+                return possible_actions[0] if len(possible_actions)=1 else possible_actions[random.randint(0,len(possible_actions))]
+
             else:
                 print('random_action',action_dict[random_action])
                 return action_dict[random_action]
@@ -166,8 +172,10 @@ class LearningAgent(Agent):
         ###########
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
-
-        self.Q[state][action] = reward
+        if self.learning:
+            current = self.Q[state][action]
+            new = current + (self.alpha * (reward *(self.get_maxQ(state)-current))
+            self.Q[state][action] = new
 
         # print(self.Q[state][action])
         # print(self.Q[state])
