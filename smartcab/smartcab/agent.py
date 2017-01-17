@@ -46,8 +46,8 @@ class LearningAgent(Agent):
         # If 'testing' is True, set epsilon and alpha to 0
         #self.epsilon = self.epsilon - .05
         if self.trial_number !=1:
-            #self.epsilon = self.alpha**self.trial_number
-            self.epsilon -=.05
+            self.epsilon = self.alpha**self.trial_number
+            #self.epsilon -=.05
 
         if testing:
             self.epsilon = 0.0
@@ -152,9 +152,9 @@ class LearningAgent(Agent):
             if epsilon > self.epsilon:
                 maxQ = self.get_maxQ(state)
                 #Build list of actions with maxQ value
-                possible_actions = [action if self.Q[state][action] == maxQ for action in self.valid_actions]
+                possible_actions = [action for action in self.valid_actions if self.Q[state][action] == maxQ]
                 # if list is only one item return the first else return a random index of the list
-                return possible_actions[0] if len(possible_actions)=1 else possible_actions[random.randint(0,len(possible_actions))]
+                return possible_actions[0] if len(possible_actions)== 1 else possible_actions[random.randint(0,len(possible_actions)-1)]
 
             else:
                 print('random_action',action_dict[random_action])
@@ -174,12 +174,9 @@ class LearningAgent(Agent):
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
         if self.learning:
             current = self.Q[state][action]
-            new = current + (self.alpha * (reward *(self.get_maxQ(state)-current))
-            self.Q[state][action] = new
+            new_value = current + (self.alpha * (reward *(self.get_maxQ(state)-current)))
+            self.Q[state][action] = new_value
 
-        # print(self.Q[state][action])
-        # print(self.Q[state])
-        # print(action)
 
         return None
 
@@ -216,7 +213,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent)
+    agent = env.create_agent(LearningAgent,learning=True)
 
     ##############
     # Follow the driving agent
@@ -233,7 +230,7 @@ def run():
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
 
-    sim = Simulator(env, update_delay=.01, log_metrics=True)
+    sim = Simulator(env, update_delay=.01, log_metrics=True,optimized=True)
 
     ##############
     # Run the simulator
@@ -241,7 +238,7 @@ def run():
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05
     #   n_test     - discrete number of testing trials to perform, default is 0
 
-    sim.run(n_test=10)
+    sim.run(n_test=20,tolerance=.00001)
 
 
 if __name__ == '__main__':
