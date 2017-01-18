@@ -120,10 +120,10 @@ class LearningAgent(Agent):
         # If it is not, create a new dictionary for that state
         #   Then, for each action available, set the initial Q-value to 0.0
 
-        #state = frozenset(state.items())
-        if not self.Q.has_key(state):
-            #create new dictionary
-            self.Q[state]=dict(zip(self.valid_actions,[0.0 for i in range(4)]))
+        if self.learning:
+            if not self.Q.has_key(state):
+                #create new dictionary
+                self.Q[state]=dict(zip(self.valid_actions,[0.0 for i in range(4)]))
 
 
 
@@ -137,30 +137,27 @@ class LearningAgent(Agent):
         # Set the agent state and default action
         self.state = state
         self.next_waypoint = self.planner.next_waypoint()
-        action = random.randint(1,5)
-        epsilon = random.random()
+        epsilon_chance = random.random()
         ###########
         ## TO DO ##
         ###########
         # When not learning, choose a random action
         # When learning, choose a random action with 'epsilon' probability
         #   Otherwise, choose an action with the highest Q-value for the current state
-        action_dict = dict(zip([1,2,3,4],self.env.valid_actions))
-        random_action = random.randint(1,4)
+
+        random_action = random.choice(self.env.valid_actions)
         if self.learning:
 
-            if epsilon > self.epsilon:
+            if epsilon_chance > self.epsilon:
                 maxQ = self.get_maxQ(state)
                 #Build list of actions with maxQ value
                 possible_actions = [action for action in self.valid_actions if self.Q[state][action] == maxQ]
-                # if list is only one item return the first else return a random index of the list
-                return possible_actions[0] if len(possible_actions)== 1 else possible_actions[random.randint(0,len(possible_actions)-1)]
+                return random.choice(possible_actions)
 
             else:
-                print('random_action',action_dict[random_action])
-                return action_dict[random_action]
+                return random_action
         else:
-            return action_dict[random_action]
+            return random_action
 
     def learn(self, state, action, reward):
         """ The learn function is called after the agent completes an action and
@@ -174,7 +171,7 @@ class LearningAgent(Agent):
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
         if self.learning:
             current = self.Q[state][action]
-            new_value = current + (self.alpha * (reward *(self.get_maxQ(state)-current)))
+            new_value = current + (self.alpha * (reward -current))
             self.Q[state][action] = new_value
 
 
@@ -213,7 +210,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent,learning=True)
+    agent = env.create_agent(LearningAgent,alpha=.9,epsilon=.9,learning=True)
 
     ##############
     # Follow the driving agent
@@ -238,7 +235,7 @@ def run():
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05
     #   n_test     - discrete number of testing trials to perform, default is 0
 
-    sim.run(n_test=20,tolerance=.00001)
+    sim.run(n_test=20,tolerance=.000000000001)
 
 
 if __name__ == '__main__':
