@@ -9,9 +9,7 @@ class LearningAgent(Agent):
         This is the object you will be modifying. """
 
     def __init__(self, env, learning=False, epsilon=1.0, alpha=0.5):
-        print('epsilon from init', epsilon)
 
-        print('learning flag' , learning)
         super(LearningAgent, self).__init__(env)     # Set the agent in the evironment
         #self.color = 'red'
         self.planner = RoutePlanner(self.env, self)  # Create a route planner
@@ -20,7 +18,6 @@ class LearningAgent(Agent):
         self.learning = learning # Whether the agent is expected to learn
         self.Q = {}          # Create a Q-table which will be a dictionary of tuples
         self.epsilon = epsilon   # Random exploration factor
-        print('self.epsilon from init', self.epsilon)
         self.alpha = alpha       # Learning factor
         self.trial_number = 1
         ###########
@@ -202,7 +199,7 @@ def run():
     #   verbose     - set to True to display additional output from the simulation
     #   num_dummies - discrete number of dummy agents in the environment, default is 100
     #   grid_size   - discrete number of intersections (columns, rows), default is (8, 6)
-    env = Environment(verbose=True)
+    env = Environment()
 
     ##############
     # Create the driving agent
@@ -210,7 +207,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent,alpha=.9,epsilon=.9,learning=True)
+    agent = env.create_agent(LearningAgent,alpha=.99,epsilon=1.0,learning=True)
 
     ##############
     # Follow the driving agent
@@ -227,7 +224,7 @@ def run():
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
 
-    sim = Simulator(env, update_delay=.01, log_metrics=True,optimized=True)
+    sim = Simulator(env, update_delay=.0001, log_metrics=True,optimized=True)
 
     ##############
     # Run the simulator
@@ -235,7 +232,7 @@ def run():
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05
     #   n_test     - discrete number of testing trials to perform, default is 0
 
-    sim.run(n_test=20,tolerance=.000000000001)
+    sim.run(n_test=20,tolerance=.00001)
 
 
 if __name__ == '__main__':
