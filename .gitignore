@@ -1,0 +1,5 @@
+*.gz
+*.p
+__pycache__/
+.ipynp_checkpoints/
+cifar-10-batches-py/
